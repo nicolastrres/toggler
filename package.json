@@ -1,0 +1,7 @@
+{
+  "name": "toggler",
+  "version": "1.0.0",
+  "description": "Feature Toggle Service using serverless",
+  "main": "index.js",
+  "license": "MIT"
+}
