@@ -20,24 +20,18 @@ service: toggler # NOTE: update this with your service name
 provider:
   name: aws
   runtime: nodejs8.10
-
-# you can overwrite defaults here
-#  stage: dev
-region: us-east-1
-
-# you can add statements to the Lambda function's IAM Role here
-iamRoleStatements:
-  - Effect: 'Allow'
-    Action:
-      - dynamodb:DescribeTable
-      - dynamodb:Query
-      - dynamodb:Scan
-      - dynamodb:GetItem
-      - dynamodb:PutItem
-      - dynamodb:UpdateItem
-      - dynamodb:DeleteItem
-    Resource:
-      - "Fn::GetAtt": [ FeatureToggles, Arn ]
+  iamRoleStatements:
+    -  Effect: "Allow"
+       Action:
+          - dynamodb:DescribeTable
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+          - dynamodb:DeleteItem
+       Resource:
+        Fn::GetAtt: [ FeatureTogglesDBTable, Arn ]
 
 # you can define service wide environment variables here
 #  environment:
@@ -97,10 +91,10 @@ resources:
       Properties:
         TableName: FeatureToggles
         AttributeDefinitions:
-          - AttributeName: feature
+          - AttributeName: name
             AttributeType: "S"
         KeySchema:
-          - AttributeName: feature
+          - AttributeName: name
             KeyType: "HASH"
         ProvisionedThroughput:
           ReadCapacityUnits: 1
