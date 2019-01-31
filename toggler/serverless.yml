@@ -54,6 +54,12 @@ functions:
       - http:
           path: toggles
           method: get
+  createToggle:
+    handler: handler.createToggle
+    events:
+      - http:
+          path: toggles
+          method: post
 
 
 #    The following are a few example events you can configure
