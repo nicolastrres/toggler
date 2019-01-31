@@ -20,6 +20,7 @@ service: toggler # NOTE: update this with your service name
 provider:
   name: aws
   runtime: nodejs8.10
+  memorySize: 512
   iamRoleStatements:
     -  Effect: "Allow"
        Action:
@@ -47,8 +48,13 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  toggle:
-    handler: handler.toggle
+  getToggles:
+    handler: handler.getToggles
+    events:
+      - http:
+          path: toggles
+          method: get
+
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -99,10 +105,3 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-  # Outputs:
-  #   FeatureTogglesDBTableArn:
-  #     Description: The ARN for the Feature's Toggles Table
-  #     Value:
-  #       "Fn::GetAtt": [ FeatureTogglesDBTable, Arn ]
-  #     Export:
-  #       Name: ${self:service}:${opt:stage}:FeatureTogglesDBTableArn

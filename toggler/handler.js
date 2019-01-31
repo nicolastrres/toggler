@@ -1,14 +1,10 @@
-'use strict';
+const { getFeatures } = require('./toggler')
 
-module.exports.toggle = async (event, context) => {
+
+module.exports.getToggles = async (event, context) => {
+  const features = await getFeatures()
   return {
     statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }),
-  };
-
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-};
+    body: JSON.stringify(features)
+  }
+}
