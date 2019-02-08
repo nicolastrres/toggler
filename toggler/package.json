@@ -9,6 +9,12 @@
   },
   "dependencies": {
     "aws-sdk": "^2.387.0",
-    "ramda": "^0.26.1"
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "ramda": "^0.26.1",
+    "sinon": "^7.2.3"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^4.3.0"
   }
 }
