@@ -28,9 +28,10 @@ const createFeature = (feature) => {
     TableName: 'FeatureToggles'
   }
 
+
   return client.put(params).promise()
     .then(() => {
-      console.log('Feature toggle created', result)
+      console.log('Feature toggle created')
     })
     .catch(err => {
       console.error('Unable to create feature toggle. Error JSON:', JSON.stringify(err, null, 2))
