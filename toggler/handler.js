@@ -1,4 +1,4 @@
-const { prop, pick } = require('ramda')
+const { pick } = require('ramda')
 const { createFeature, getFeatures } = require('./toggler')
 const { notifyFeatureCreated } = require('./email')
 

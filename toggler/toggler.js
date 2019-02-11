@@ -1,21 +1,9 @@
 const AWS = require('aws-sdk')
-const { map, prop, pick } = require('ramda')
-
-AWS.config.update({
-  region: 'us-east-1'
-})
-
-
-
-const client = new AWS.DynamoDB.DocumentClient()
-const tableName = {
-    TableName: 'FeatureToggles'
-}
-
+const { map, pick } = require('ramda')
+const { getAllItems, addItem } = require('./clients/dbClient')
 
 const getFeatures = () => {
-  return client.scan(tableName).promise()
-    .then(prop('Items'))
+  return getAllItems('FeeatureToggles')
     .then(map(pick(['name', 'value'])))
     .catch(err => {
       console.error('Unable to scan the table. Error JSON:', JSON.stringify(err, null, 2))
@@ -23,13 +11,7 @@ const getFeatures = () => {
 }
 
 const createFeature = (feature) => {
-  const params = {
-    Item: feature,
-    TableName: 'FeatureToggles'
-  }
-
-
-  return client.put(params).promise()
+  return addItem('FeatureToggles', feature)
     .then(() => {
       console.log('Feature toggle created')
     })
