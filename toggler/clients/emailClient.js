@@ -21,11 +21,10 @@ const buildParams = (sourceAddress, toAddresses, subject, body) => {
   }
 }
 
-const sendEmail = (sourceAddress, emailAddresses, subject, body) => {
-
+const sendEmail = (sourceAddress, toAddresses, subject, body) => {
   const sesClient = new AWS.SES({ apiVersion: '2010-12-01', region: 'us-east-1' })
   return sesClient
-    .sendEmail(buildParams(sourceAddress, emailAddresses, subject, body))
+    .sendEmail(buildParams(sourceAddress, toAddresses, subject, body))
     .promise()
 }
 

@@ -1,25 +1,39 @@
-const AWS = require('aws-sdk')
-const { map, pick } = require('ramda')
-const { getAllItems, addItem } = require('./clients/dbClient')
+const { allPass, has, ifElse, map, pick, pipe, pipeWith, then } = require('ramda')
+const dbClient = require('./clients/dbClient')
+const emailClient = require('./clients/emailClient')
+
+const pipeP = pipeWith(then)
 
 const tableName = 'FeatureToggles'
+const featureFields = ['name', 'value']
 
-const getFeatures = () => {
-  return getAllItems(tableName)
-    .then(map(pick(['name', 'value'])))
-    .catch(err => {
-      console.error('Unable to scan the table. Error JSON:', JSON.stringify(err, null, 2))
-    })
+const getFeature = pick(featureFields)
+
+const getFeatures = pipeP([
+  () => dbClient.getAllItems(tableName),
+  map(getFeature)
+])
+
+const notifyFeatureCreated = (sourceAddress, toAddresses) => {
+  const subject = 'Feature was created'
+  const body = 'Feature was recently created'
+
+  return emailClient.sendEmail(sourceAddress, toAddresses, subject, body)
 }
 
-const createFeature = (feature) => {
-  return addItem(tableName, feature)
-    .then(() => {
-      console.log('Feature toggle created')
-    })
-    .catch(err => {
-      console.error('Unable to create feature toggle. Error JSON:', JSON.stringify(err, null, 2))
-    })
-}
 
-module.exports = { getFeatures, createFeature }
+const validFeature = allPass(map(has, featureFields))
+const throwMissingParamError = () => { throw new Error('Missing parameter. Please provide name and value') }
+
+const createFeature = ifElse(
+  validFeature,
+  pipe(
+    getFeature,
+    feature => dbClient.addItem(tableName, feature)
+  ),
+  throwMissingParamError
+)
+
+
+
+module.exports = { getFeatures, createFeature, notifyFeatureCreated }
