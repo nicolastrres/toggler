@@ -18,7 +18,7 @@ const addItem = (tableName, item) => {
   return client.put({
     TableName: tableName,
     Item: item
-  })
+  }).promise()
 }
 
 module.exports = { getAllItems, addItem }

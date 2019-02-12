@@ -2,8 +2,10 @@ const AWS = require('aws-sdk')
 const { map, pick } = require('ramda')
 const { getAllItems, addItem } = require('./clients/dbClient')
 
+const tableName = 'FeatureToggles'
+
 const getFeatures = () => {
-  return getAllItems('FeeatureToggles')
+  return getAllItems(tableName)
     .then(map(pick(['name', 'value'])))
     .catch(err => {
       console.error('Unable to scan the table. Error JSON:', JSON.stringify(err, null, 2))
@@ -11,7 +13,7 @@ const getFeatures = () => {
 }
 
 const createFeature = (feature) => {
-  return addItem('FeatureToggles', feature)
+  return addItem(tableName, feature)
     .then(() => {
       console.log('Feature toggle created')
     })
