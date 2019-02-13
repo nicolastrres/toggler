@@ -24,8 +24,8 @@ describe('dbClient', () => {
     expect(items).to.be.equal(expectedItems)
   })
 
-  it('adds an item', async () => {
-    await addItem('someTable', 'someItem')
+  it('adds an item', () => {
+    addItem('someTable', 'someItem')
 
     expect(putSpy.calledOnceWith({
       Item: 'someItem',
