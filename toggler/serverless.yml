@@ -40,6 +40,9 @@ functions:
     handler: handler.notifyNewFeature
     events:
       - stream: arn:aws:dynamodb:us-east-1:737651399098:table/FeatureToggles/stream/2019-01-31T02:10:11.056
+    environment:
+      SOURCE_ADDRESS: ${env:SOURCE_ADDRESS}
+      TO_ADDRESS: ${env:TO_ADDRESS}
 
 # you can add CloudFormation resource templates here
 resources:

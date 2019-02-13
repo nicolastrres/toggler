@@ -1,6 +1,5 @@
 const { pick } = require('ramda')
-const { createFeature, getFeatures } = require('./toggler')
-const { notifyFeatureCreated } = require('./email')
+const { createFeature, getFeatures, notifyFeatureCreated } = require('./toggler')
 
 module.exports.getToggles = async (event, context) => {
   const features = await getFeatures()
@@ -25,6 +24,6 @@ module.exports.createToggle = async (event, context) => {
 }
 
 module.exports.notifyNewFeature = async (event, context) => {
-  await notifyFeatureCreated()
-  return ''
+  const { SOURCE_ADDRESS, TO_ADDRESS } = process.env
+  await notifyFeatureCreated(SOURCE_ADDRESS, [TO_ADDRESS])  // TODO: TO_ADDRESS should be a list
 }
