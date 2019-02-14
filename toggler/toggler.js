@@ -10,15 +10,15 @@ const featureFields = ['name', 'value']
 const getFeature = pick(featureFields)
 
 const getFeatures = pipeP([
-  () => dbClient.getAllItems(tableName),
-  map(getFeature)
+    () => dbClient.getAllItems(tableName),
+    map(getFeature)
 ])
 
 const notifyFeatureCreated = (sourceAddress, toAddresses) => {
-  const subject = 'Feature was created'
-  const body = 'Feature was recently created'
+    const subject = 'Feature was created'
+    const body = 'Feature was recently created'
 
-  return emailClient.sendEmail(sourceAddress, toAddresses, subject, body)
+    return emailClient.sendEmail(sourceAddress, toAddresses, subject, body)
 }
 
 
@@ -26,12 +26,12 @@ const validFeature = allPass(map(has, featureFields))
 const throwMissingParamError = () => { throw new Error('Missing parameter. Please provide name and value') }
 
 const createFeature = ifElse(
-  validFeature,
-  pipe(
-    getFeature,
-    feature => dbClient.addItem(tableName, feature)
-  ),
-  throwMissingParamError
+    validFeature,
+    pipe(
+        getFeature,
+        feature => dbClient.addItem(tableName, feature)
+    ),
+    throwMissingParamError
 )
 
 

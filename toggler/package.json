@@ -7,9 +7,14 @@
   "engines": {
     "node": "8.10.0"
   },
+  "scripts": {
+    "lint": "eslint \"./**/*.js\"",
+    "test": "mocha tests/**/*.test.js"
+  },
   "dependencies": {
     "aws-sdk": "^2.387.0",
     "chai": "^4.2.0",
+    "eslint": "^5.13.0",
     "mocha": "^5.2.0",
     "ramda": "^0.26.1",
     "sinon": "^7.2.3"
