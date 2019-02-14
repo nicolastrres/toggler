@@ -1,28 +1,28 @@
 const { pick } = require('ramda')
-const { createFeature, getFeatures, notifyFeatureCreated } = require('./toggler')
+const toggler = require('./toggler')
 
 module.exports.getToggles = async () => {
-    const features = await getFeatures()
+  const toggles = await toggler.getToggles()
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify(features)
-    }
+  return {
+    statusCode: 200,
+    body: JSON.stringify(toggles)
+  }
 }
 
 
 module.exports.createToggle = async (event) => {
-    const body = JSON.parse(event.body)
-    const featureParams = pick(['name', 'value'], body)
+  const body = JSON.parse(event.body)
+  const toggleParams = pick(['name', 'value'], body)
 
-    await createFeature(featureParams)
+  await toggler.createToggles(toggleParams)
 
-    return {
-        statusCode: 201
-    }
+  return {
+    statusCode: 201
+  }
 }
 
-module.exports.notifyNewFeature = async () => {
-    const { SOURCE_ADDRESS, TO_ADDRESS } = process.env
-    await notifyFeatureCreated(SOURCE_ADDRESS, [TO_ADDRESS])  // TODO: TO_ADDRESS should be a list
+module.exports.notifyToggleCreated = async () => {
+  const { SOURCE_ADDRESS, TO_ADDRESS } = process.env
+  await toggler.notifyToggleCreated(SOURCE_ADDRESS, [TO_ADDRESS])  // TODO: TO_ADDRESS should be a list
 }

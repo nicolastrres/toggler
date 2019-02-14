@@ -5,35 +5,33 @@ const emailClient = require('./clients/emailClient')
 const pipeP = pipeWith(then)
 
 const tableName = 'FeatureToggles'
-const featureFields = ['name', 'value']
+const toggleFields = ['name', 'value']
 
-const getFeature = pick(featureFields)
+const getToggle = pick(toggleFields)
 
-const getFeatures = pipeP([
-    () => dbClient.getAllItems(tableName),
-    map(getFeature)
+const getToggles = pipeP([
+  () => dbClient.getAllItems(tableName),
+  map(getToggle)
 ])
 
-const notifyFeatureCreated = (sourceAddress, toAddresses) => {
-    const subject = 'Feature was created'
-    const body = 'Feature was recently created'
+const notifyToggleCreated = (sourceAddress, toAddresses) => {
+  const subject = 'Feature toggle was created'
+  const body = 'Feature toggle was recently created'
 
-    return emailClient.sendEmail(sourceAddress, toAddresses, subject, body)
+  return emailClient.sendEmail(sourceAddress, toAddresses, subject, body)
 }
 
 
-const validFeature = allPass(map(has, featureFields))
+const validToggle = allPass(map(has, toggleFields))
 const throwMissingParamError = () => { throw new Error('Missing parameter. Please provide name and value') }
 
-const createFeature = ifElse(
-    validFeature,
-    pipe(
-        getFeature,
-        feature => dbClient.addItem(tableName, feature)
-    ),
-    throwMissingParamError
+const createToggle = ifElse(
+  validToggle,
+  pipe(
+    getToggle,
+    toggle => dbClient.addItem(tableName, toggle)
+  ),
+  throwMissingParamError
 )
 
-
-
-module.exports = { getFeatures, createFeature, notifyFeatureCreated }
+module.exports = { getToggles, createToggle, notifyToggleCreated }

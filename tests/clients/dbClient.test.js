@@ -8,29 +8,28 @@ AWS.setSDK(path.resolve(__dirname, '../../node_modules/aws-sdk'))
 
 
 describe('dbClient', () => {
-    let putSpy
+  let putSpy
 
-    before(() => {
-        putSpy = spy()
-        AWS.mock('DynamoDB.DocumentClient', 'scan', { Items: 'someItems' })
-        AWS.mock('DynamoDB.DocumentClient', 'put', putSpy)
-    })
+  before(() => {
+    putSpy = spy()
+    AWS.mock('DynamoDB.DocumentClient', 'scan', { Items: 'someItems' })
+    AWS.mock('DynamoDB.DocumentClient', 'put', putSpy)
+  })
 
-    it('gets all items', async () => {
-        const expectedItems = 'someItems'
+  it('gets all items', async () => {
+    const expectedItems = 'someItems'
 
-        const items = await getAllItems('someTable')
+    const items = await getAllItems('someTable')
 
-        expect(items).to.be.equal(expectedItems)
-    })
+    expect(items).to.be.equal(expectedItems)
+  })
 
-    it('adds an item', () => {
-        addItem('someTable', 'someItem')
+  it('adds an item', () => {
+    addItem('someTable', 'someItem')
 
-        expect(putSpy.calledOnceWith({
-            Item: 'someItem',
-            TableName: 'someTable'
-        })).to.be.equal(true)
-
-    })
+    expect(putSpy.calledOnceWith({
+      Item: 'someItem',
+      TableName: 'someTable'
+    })).to.be.equal(true)
+  })
 })

@@ -8,8 +8,8 @@
     "node": "8.10.0"
   },
   "scripts": {
-    "lint": "eslint \"./**/*.js\"",
-    "test": "mocha tests/**/*.test.js"
+    "lint": "eslint .",
+    "test": "mocha tests/**.test.js"
   },
   "dependencies": {
     "aws-sdk": "^2.387.0",
