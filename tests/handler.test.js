@@ -56,6 +56,7 @@ describe('handler', () => {
       })
     })
   })
+
   describe('#createToggle', () => {
     let response
 
@@ -90,6 +91,33 @@ describe('handler', () => {
 
       it('contains body with error message', () => {
         expect(response.body).to.be.equal('{"message":"An error happened while trying to create a toggle"}')
+      })
+    })
+  })
+
+  describe('#notifyToggleCreated', () => {
+    const sourceAddress = 'SOURCE EMAIL ADDRESS'
+    const toAddress = 'TO EMAIL ADDRESS'
+
+    before(() => {
+      process.env.SOURCE_ADDRESS = sourceAddress
+      process.env.TO_ADDRESS = toAddress
+    })
+
+    context('when notifications are sent with success', () => {
+      before(() => {
+        stub(toggler, 'notifyToggleCreated')
+        handler.notifyToggleCreated()
+      })
+
+      after(() => {
+        toggler.notifyToggleCreated.restore()
+      })
+
+      it('calls toggler service with email addresses', () => {
+        const spyCall = toggler.notifyToggleCreated.getCall(0)
+
+        expect(spyCall.calledWith(sourceAddress, [toAddress])).to.be.equal(true)
       })
     })
   })

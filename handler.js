@@ -36,6 +36,11 @@ module.exports.createToggle = async (event) => {
 }
 
 module.exports.notifyToggleCreated = async () => {
-  const { SOURCE_ADDRESS, TO_ADDRESS } = process.env
-  await toggler.notifyToggleCreated(SOURCE_ADDRESS, [TO_ADDRESS])  // TODO: TO_ADDRESS should be a list
+  try {
+    const { SOURCE_ADDRESS, TO_ADDRESS } = process.env
+
+    await toggler.notifyToggleCreated(SOURCE_ADDRESS, [TO_ADDRESS])  // TODO: TO_ADDRESS should be a list
+  } catch(error) {
+    logger.error(`[notifyToggleCreated] The following error was raised: ${error}`)
+  }
 }
