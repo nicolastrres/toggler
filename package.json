@@ -9,7 +9,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha tests/**.test.js"
+    "test": "mocha 'tests/**/*.test.js'"
   },
   "dependencies": {
     "aws-sdk": "^2.387.0",
