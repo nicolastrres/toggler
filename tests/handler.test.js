@@ -56,4 +56,41 @@ describe('handler', () => {
       })
     })
   })
+  describe('#createToggle', () => {
+    let response
+
+    context('when features are created with success', () => {
+      before(async () => {
+        stub(toggler, 'createToggle').resolves()
+        response = await handler.createToggle({body: '{ "name": "some name", "value": "some value" }' })
+      })
+
+      after(() => {
+        toggler.createToggle.restore()
+      })
+
+      it('contains CREATED status code', () => {
+        expect(response.statusCode).to.be.equal(201)
+      })
+    })
+
+    context('when an error is raised', () => {
+      before(async () => {
+        stub(toggler, 'createToggle').rejects('Some error was raised')
+        response = await handler.createToggle({body: '{ "name": "some name", "value": "some value" }' })
+      })
+
+      after(() => {
+        toggler.createToggle.restore()
+      })
+
+      it('contains INTERNAL SERVER ERROR status code', () => {
+        expect(response.statusCode).to.be.equal(500)
+      })
+
+      it('contains body with error message', () => {
+        expect(response.body).to.be.equal('{"message":"An error happened while trying to create a toggle"}')
+      })
+    })
+  })
 })

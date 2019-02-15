@@ -7,6 +7,8 @@ const buildResponse = (statusCode, body) => ({
   body: JSON.stringify(body)
 })
 
+const buildInternalServerErrorResponse = (errorMessage) => buildResponse(500, { message: errorMessage })
+
 module.exports.getToggles = async () => {
   try {
     const toggles = await toggler.getToggles()
@@ -14,19 +16,23 @@ module.exports.getToggles = async () => {
     return buildResponse(200, toggles)
   } catch(error) {
     logger.error(`[getToggles] The following error was raised: ${error}`)
-    return buildResponse(500, { message: 'An error happened while trying to retrieve toggles' })
+    return buildInternalServerErrorResponse('An error happened while trying to retrieve toggles')
   }
 }
 
 module.exports.createToggle = async (event) => {
-  const body = JSON.parse(event.body)
-  const toggleParams = pick(['name', 'value'], body)
+  try {
+    const body = JSON.parse(event.body)
+    const toggleParams = pick(['name', 'value'], body)
 
-  await toggler.createToggles(toggleParams)
+    await toggler.createToggle(toggleParams)
 
-  return {
-    statusCode: 201
+    return { statusCode: 201 }
+  } catch(error) {
+    logger.error(`[createToggle] The following error was raised: ${error}`)
+    return buildInternalServerErrorResponse('An error happened while trying to create a toggle')
   }
+
 }
 
 module.exports.notifyToggleCreated = async () => {
