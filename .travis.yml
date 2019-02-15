@@ -5,5 +5,7 @@ notifications:
   email: false
 
 script:
-  - npm install -g serverless
+  - yarn lint
+  - yarn test
+  - yarn global add serverless
   - sls deploy
