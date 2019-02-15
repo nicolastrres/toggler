@@ -1,15 +1,22 @@
 const { pick } = require('ramda')
+const { logger } = require('./logger')
 const toggler = require('./toggler')
 
-module.exports.getToggles = async () => {
-  const toggles = await toggler.getToggles()
+const buildResponse = (statusCode, body) => ({
+  statusCode,
+  body: JSON.stringify(body)
+})
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(toggles)
+module.exports.getToggles = async () => {
+  try {
+    const toggles = await toggler.getToggles()
+
+    return buildResponse(200, toggles)
+  } catch(error) {
+    logger.error(`[getToggles] The following error was raised: ${error}`)
+    return buildResponse(500, { message: 'An error happened while trying to retrieve toggles' })
   }
 }
-
 
 module.exports.createToggle = async (event) => {
   const body = JSON.parse(event.body)
