@@ -7,16 +7,19 @@ const buildResponse = (statusCode, body) => ({
   body: JSON.stringify(body)
 })
 
-const buildInternalServerErrorResponse = (errorMessage) => buildResponse(500, { message: errorMessage })
+const buildInternalServerErrorResponse = (errorMessage) =>
+  buildResponse(500, { message: errorMessage })
 
 module.exports.getToggles = async () => {
   try {
     const toggles = await toggler.getToggles()
 
     return buildResponse(200, toggles)
-  } catch(error) {
+  } catch (error) {
     logger.error(`[getToggles] The following error was raised: ${error}`)
-    return buildInternalServerErrorResponse('An error happened while trying to retrieve toggles')
+    return buildInternalServerErrorResponse(
+      'An error happened while trying to retrieve toggles'
+    )
   }
 }
 
@@ -28,19 +31,22 @@ module.exports.createToggle = async (event) => {
     await toggler.createToggle(toggleParams)
 
     return { statusCode: 201 }
-  } catch(error) {
+  } catch (error) {
     logger.error(`[createToggle] The following error was raised: ${error}`)
-    return buildInternalServerErrorResponse('An error happened while trying to create a toggle')
+    return buildInternalServerErrorResponse(
+      'An error happened while trying to create a toggle'
+    )
   }
-
 }
 
 module.exports.notifyToggleCreated = async () => {
   try {
     const { SOURCE_ADDRESS, TO_ADDRESS } = process.env
 
-    await toggler.notifyToggleCreated(SOURCE_ADDRESS, [TO_ADDRESS])  // TODO: TO_ADDRESS should be a list
-  } catch(error) {
-    logger.error(`[notifyToggleCreated] The following error was raised: ${error}`)
+    await toggler.notifyToggleCreated(SOURCE_ADDRESS, [TO_ADDRESS]) // TODO: TO_ADDRESS should be a list
+  } catch (error) {
+    logger.error(
+      `[notifyToggleCreated] The following error was raised: ${error}`
+    )
   }
 }

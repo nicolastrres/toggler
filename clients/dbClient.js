@@ -8,17 +8,21 @@ AWS.config.update({
 const getAllItems = (tableName) => {
   const client = new AWS.DynamoDB.DocumentClient()
 
-  return client.scan({ TableName: tableName }).promise()
+  return client
+    .scan({ TableName: tableName })
+    .promise()
     .then(prop('Items'))
 }
 
 const addItem = (tableName, item) => {
   const client = new AWS.DynamoDB.DocumentClient()
 
-  return client.put({
-    TableName: tableName,
-    Item: item
-  }).promise()
+  return client
+    .put({
+      TableName: tableName,
+      Item: item
+    })
+    .promise()
 }
 
 module.exports = { getAllItems, addItem }
